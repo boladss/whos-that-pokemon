@@ -56,7 +56,7 @@ class SearchScreen extends StatelessWidget {
             // Type Filter
             const TypeFilterPicker(types: _pokemonTypes),
 
-            const SizedBox(height: 8),
+            const SizedBox(height: 2),
 
             // Grid
             Expanded(
