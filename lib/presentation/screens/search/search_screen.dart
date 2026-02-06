@@ -27,7 +27,7 @@ class SearchScreen extends StatelessWidget {
     'Ice',
     'Dragon',
     'Dark',
-    'Fairy'
+    'Fairy',
   ];
 
   @override
@@ -62,6 +62,11 @@ class SearchScreen extends StatelessWidget {
             Expanded(
               child: BlocBuilder<SearchBloc, SearchState>(
                 builder: (context, state) {
+                  if (state.isLoading && state.allPokemon.isEmpty) {
+                    return const Center(
+                      child: CircularProgressIndicator(color: Colors.red),
+                    );
+                  }
                   // Empty state
                   if (state.filteredPokemon.isEmpty) {
                     return const Center(child: Text("No Pokémon found!"));
