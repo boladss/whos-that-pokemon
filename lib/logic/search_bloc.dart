@@ -22,20 +22,19 @@ class FilterByTypeEvent extends SearchEvent {
   FilterByTypeEvent(this.type);
 }
 
-// --- STATE ---
 class SearchState extends Equatable {
   final List<Map<String, dynamic>> filteredPokemon;
-  final String selectedType;
+  final List<String> selectedTypes;
   final String searchQuery;
 
   const SearchState({
     required this.filteredPokemon,
-    this.selectedType = 'All',
+    this.selectedTypes = const ['All'], // Default to 'All'
     this.searchQuery = '',
   });
 
   @override
-  List<Object> get props => [filteredPokemon, selectedType, searchQuery];
+  List<Object> get props => [filteredPokemon, selectedTypes, searchQuery];
 }
 
 // --- BLOC ---
@@ -80,23 +79,45 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     });
 
     on<FilterByTypeEvent>((event, emit) {
-      _applyFilters(emit, newType: event.type);
+      List<String> currentTypes = List.from(state.selectedTypes);
+
+      if (event.type == 'All') {
+        currentTypes = ['All'];
+      } else {
+        currentTypes.remove('All');
+        if (currentTypes.contains(event.type)) {
+          currentTypes.remove(event.type);
+        } else {
+          currentTypes.add(event.type);
+        }
+      }
+
+      _applyFilters(emit, newTypes: currentTypes);
     });
   }
 
   void _applyFilters(
     Emitter<SearchState> emit, {
     String? newQuery,
-    String? newType,
+    List<String>? newTypes,
   }) {
     final query = newQuery ?? state.searchQuery;
-    final type = newType ?? state.selectedType;
+    var types = newTypes ?? state.selectedTypes;
+
+    // All cannot be selected with others
+    if (types.isEmpty) types = ['All'];
 
     final results = _mockPokemon.where((p) {
       final matchesSearch = p['name'].toLowerCase().contains(
         query.toLowerCase(),
       );
-      final matchesType = type == 'All' || (p['types'] as List).contains(type);
+
+      final pokemonTypes = p['types'] as List;
+
+      final matchesType =
+          types.contains('All') ||
+          types.every((selected) => pokemonTypes.contains(selected));
+
       return matchesSearch && matchesType;
     }).toList();
 
@@ -104,7 +125,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       SearchState(
         filteredPokemon: results,
         searchQuery: query,
-        selectedType: type,
+        selectedTypes: types,
       ),
     );
   }
