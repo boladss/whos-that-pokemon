@@ -4,7 +4,6 @@ import 'package:maya_flutter_hackathon/logic/search_bloc.dart';
 
 class TypeFilterPicker extends StatelessWidget {
   final List<String> types;
-
   const TypeFilterPicker({super.key, required this.types});
 
   @override
@@ -18,20 +17,20 @@ class TypeFilterPicker extends StatelessWidget {
         itemBuilder: (context, index) {
           final type = types[index];
           return BlocBuilder<SearchBloc, SearchState>(
-            buildWhen: (previous, current) =>
-                previous.selectedType != current.selectedType,
+            buildWhen: (prev, curr) => prev.selectedTypes != curr.selectedTypes,
             builder: (context, state) {
-              final isSelected = state.selectedType == type;
+              final isSelected = state.selectedTypes.contains(type);
               return Padding(
                 padding: const EdgeInsets.only(right: 8),
-                child: ChoiceChip(
+                child: FilterChip(
+                  // 👈 Changed to FilterChip
                   label: Text(type),
                   selected: isSelected,
-                  onSelected: (selected) {
-                    if (selected) {
-                      context.read<SearchBloc>().add(FilterByTypeEvent(type));
-                    }
+                  onSelected: (_) {
+                    context.read<SearchBloc>().add(FilterByTypeEvent(type));
                   },
+                  selectedColor: Colors.redAccent.withOpacity(0.2),
+                  checkmarkColor: Colors.red,
                 ),
               );
             },
