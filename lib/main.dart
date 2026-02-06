@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:maya_flutter_hackathon/presentation/screens/search/search_screen.dart';
 import 'package:maya_flutter_hackathon/presentation/screens/guess/guess_game_screen.dart';
+import 'package:maya_flutter_hackathon/core/di/injection.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await init();
   runApp(const MyApp());
 }
 
