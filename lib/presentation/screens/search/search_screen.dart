@@ -81,6 +81,7 @@ class SearchScreen extends StatelessWidget {
                       final pokemonData = state.filteredPokemon[index];
                       return PokemonCard(
                         name: pokemonData['name'] ?? 'Unknown',
+                        imageUrl: pokemonData['imageUrl'] ?? '',
                       );
                     },
                   );
