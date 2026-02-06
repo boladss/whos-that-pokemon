@@ -28,7 +28,6 @@ class SearchScreen extends StatelessWidget {
     'Dragon',
     'Dark',
     'Fairy'
-    'Stellar'
   ];
 
   @override
