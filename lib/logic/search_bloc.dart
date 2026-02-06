@@ -7,45 +7,105 @@ abstract class SearchEvent extends Equatable {
   List<Object> get props => [];
 }
 
+// --- EVENTS ---
+
 class FilterPokemonEvent extends SearchEvent {
   final String query;
   FilterPokemonEvent(this.query);
-}
-
-// --- STATES ---
-class SearchState extends Equatable {
-  final List<String> allPokemon;
-  final List<String> filteredPokemon;
-
-  const SearchState({required this.allPokemon, required this.filteredPokemon});
 
   @override
-  List<Object> get props => [allPokemon, filteredPokemon];
+  List<Object> get props => [query];
+}
+
+class FilterByTypeEvent extends SearchEvent {
+  final String type;
+  FilterByTypeEvent(this.type);
+}
+
+// --- STATE ---
+class SearchState extends Equatable {
+  final List<Map<String, dynamic>> filteredPokemon;
+  final String selectedType;
+  final String searchQuery;
+
+  const SearchState({
+    required this.filteredPokemon,
+    this.selectedType = 'All',
+    this.searchQuery = '',
+  });
+
+  @override
+  List<Object> get props => [filteredPokemon, selectedType, searchQuery];
 }
 
 // --- BLOC ---
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
-  // Mock data
-  static const List<String> _mockData = [
-    'Bulbasaur',
-    'Ivysaur',
-    'Venusaur',
-    'Charmander',
-    'Charmeleon',
-    'Charizard',
-    'Squirtle',
-    'Pikachu',
+  // Mock data with types
+  static final List<Map<String, dynamic>> _mockPokemon = [
+    {
+      'name': 'Bulbasaur',
+      'types': ['Grass', 'Poison'],
+    },
+    {
+      'name': 'Charmander',
+      'types': ['Fire'],
+    },
+    {
+      'name': 'Squirtle',
+      'types': ['Water'],
+    },
+    {
+      'name': 'Pikachu',
+      'types': ['Electric'],
+    },
+    {
+      'name': 'Gengar',
+      'types': ['Ghost', 'Poison'],
+    },
   ];
 
-  SearchBloc()
-    : super(
-        const SearchState(allPokemon: _mockData, filteredPokemon: _mockData),
-      ) {
+  static final List<String> _allTypes = [
+    'All',
+    'Grass',
+    'Fire',
+    'Water',
+    'Electric',
+    'Ghost',
+    'Poison',
+  ];
+
+  SearchBloc() : super(SearchState(filteredPokemon: _mockPokemon)) {
     on<FilterPokemonEvent>((event, emit) {
-      final results = state.allPokemon
-          .where((p) => p.toLowerCase().contains(event.query.toLowerCase()))
-          .toList();
-      emit(SearchState(allPokemon: state.allPokemon, filteredPokemon: results));
+      _applyFilters(emit, newQuery: event.query);
     });
+
+    on<FilterByTypeEvent>((event, emit) {
+      _applyFilters(emit, newType: event.type);
+    });
+  }
+
+  void _applyFilters(
+    Emitter<SearchState> emit, {
+    String? newQuery,
+    String? newType,
+  }) {
+    final query = newQuery ?? state.searchQuery;
+    final type = newType ?? state.selectedType;
+
+    final results = _mockPokemon.where((p) {
+      final matchesSearch = p['name'].toLowerCase().contains(
+        query.toLowerCase(),
+      );
+      final matchesType = type == 'All' || (p['types'] as List).contains(type);
+      return matchesSearch && matchesType;
+    }).toList();
+
+    emit(
+      SearchState(
+        filteredPokemon: results,
+        searchQuery: query,
+        selectedType: type,
+      ),
+    );
   }
 }
