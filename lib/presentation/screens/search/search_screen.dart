@@ -87,6 +87,7 @@ class SearchScreen extends StatelessWidget {
                       return PokemonCard(
                         name: pokemonData['name'] ?? 'Unknown',
                         imageUrl: pokemonData['imageUrl'] ?? '',
+                        types: List<String>.from(pokemonData['types'] ?? []),
                       );
                     },
                   );
