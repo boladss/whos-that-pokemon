@@ -63,16 +63,6 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     },
   ];
 
-  static final List<String> _allTypes = [
-    'All',
-    'Grass',
-    'Fire',
-    'Water',
-    'Electric',
-    'Ghost',
-    'Poison',
-  ];
-
   SearchBloc() : super(SearchState(filteredPokemon: _mockPokemon)) {
     on<FilterPokemonEvent>((event, emit) {
       _applyFilters(emit, newQuery: event.query);
