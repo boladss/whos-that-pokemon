@@ -4,4 +4,5 @@ A project made in Flutter using the PokéAPI that allows the user to guess the b
 
 ## Launching the application
 
+- Launch chosen emulator
 - Simply enter `flutter run` while in the `whos-that-pokemon` directory.
