@@ -14,11 +14,24 @@ class GuessInputField extends StatelessWidget {
       autocorrect: false,
       textInputAction: TextInputAction.done,
       decoration: InputDecoration(
-        labelText: 'Guess the name',
+        floatingLabelBehavior: FloatingLabelBehavior.never,
+        labelText: 'Guess the pokemon!',
         hintText: 'e.g. Pikachu',
         filled: true,
-        prefixIcon: const Icon(Icons.edit),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+        fillColor: Colors.grey[100],
+        prefixIcon: const Icon(Icons.catching_pokemon, color: Colors.red),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.grey[300]!, width: 1),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.red, width: 2),
+        ),
       ),
       onSubmitted: (value) {
         if (value.trim().isNotEmpty) {

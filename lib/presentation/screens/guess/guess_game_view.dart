@@ -29,8 +29,6 @@ class _GuessGameViewState extends State<GuessGameView> {
       appBar: AppBar(
         title: const Text("Who's That Pokémon?"),
         centerTitle: true,
-        backgroundColor: Colors.redAccent,
-        foregroundColor: Colors.white,
       ),
       body: BlocConsumer<GameBloc, GameState>(
         listener: (context, state) {
