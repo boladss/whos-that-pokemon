@@ -10,12 +10,25 @@ class SearchScreen extends StatelessWidget {
 
   static const List<String> _pokemonTypes = [
     'All',
-    'Grass',
+    'Normal',
+    'Fighting',
+    'Flying',
+    'Poison',
+    'Ground',
+    'Rock',
+    'Bug',
+    'Ghost',
+    'Steel',
     'Fire',
     'Water',
+    'Grass',
     'Electric',
-    'Ghost',
-    'Poison',
+    'Psychic',
+    'Ice',
+    'Dragon',
+    'Dark',
+    'Fairy'
+    'Stellar'
   ];
 
   @override
