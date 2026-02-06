@@ -15,7 +15,9 @@ class PokemonRemoteDataSourceImpl implements PokemonRemoteDataSource {
   @override
   Future<PokemonModel> getRandomPokemon() async {
     // Generate a random pokemon
-    final id = Random().nextInt(1000) + 1; 
+
+    print("fecthing");
+    final id = Random().nextInt(1000) + 1;
 
     // Fetch Pokemon Data
     final pokemonResponse = await client.get(
@@ -27,6 +29,8 @@ class PokemonRemoteDataSourceImpl implements PokemonRemoteDataSource {
     }
 
     final pokemonData = jsonDecode(pokemonResponse.body);
+
+    print(pokemonData);
 
     // Fetch Species Data
     final speciesResponse = await client.get(
